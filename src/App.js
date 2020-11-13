@@ -1,7 +1,20 @@
+import {useState, useEffect} from "react";
 import "./App.css";
 import Posts from "./Posts";
+import {db} from "./firebase";
 
 function App() {
+  const [posts, setPosts] = useState([]);
+  // useEffects Runs a piece of code based on a specific condition
+  useEffect(() => {
+    db.collection('posts').onSnapshot(snapShot => {
+      // Modified into objects
+      setPosts(snapShot.docs.map(doc => ({
+        id: doc.id,
+        post:doc.data()
+      })));
+    })
+  }, [posts])
   return (
     <div className="app">
       {/* Header */}
@@ -12,13 +25,12 @@ function App() {
           alt="logo"
         />
       </div>
-      <Posts
-        imageURL="https://instagram.fblr4-2.fna.fbcdn.net/v/t51.2885-15/e35/s1080x1080/75007391_164192394649271_54482691017029978_n.jpg?_nc_ht=instagram.fblr4-2.fna.fbcdn.net&_nc_cat=111&_nc_ohc=Nb--blSfGekAX-YtRkQ&tp=15&oh=d3dad46b2833af15b832b6b86a29a96a&oe=5FD64409"
-        username="Samuel David"
-        caption="Love the view"
-      />
-      {/* Posts */}
-      {/* Posts */}
+      {
+        // Array Destructed
+        posts.map(({post,id}) => (
+          <Posts key={id} username={post.username} imageURL={post.imageURL} caption={post.caption}/>
+        ))
+      }
     </div>
   );
 }
