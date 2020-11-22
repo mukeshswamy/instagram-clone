@@ -2,6 +2,7 @@ import React from "react";
 import "./posts.css";
 import Avatar from "@material-ui/core/Avatar";
 
+
 function Posts({ imageURL, username, caption }) {
   return (
     <div className="posts">
